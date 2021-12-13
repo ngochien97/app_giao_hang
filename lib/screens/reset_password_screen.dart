@@ -28,40 +28,48 @@ class _ResetPasswordState extends State<ResetPassword> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset('images/forgot.png',height: 250,),
-                SizedBox(height: 20,),
-                RichText(text: TextSpan(
-                    text: '',
-                    children: [
-                      TextSpan(
-                          text: 'Quên mât khẩu ' ,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.red,
-                          ),
+                Image.asset(
+                  'images/forgot.png',
+                  height: 250,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                RichText(
+                  text: TextSpan(text: '', children: [
+                    TextSpan(
+                      text: 'Quên mât khẩu ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
                       ),
-                      TextSpan(
-                          text : 'Đừng lo lắng! Nhập lại email đăng kí. Chúng tôi sẽ gửi bạn 1 email để lấy lại mật khẩu',
-                          style :TextStyle(
-                            color: Colors.red,
-                            fontSize: 12,
-                          ),
+                    ),
+                    TextSpan(
+                      text:
+                          'Đừng lo lắng! Nhập lại email đăng kí. Chúng tôi sẽ gửi bạn 1 email để lấy lại mật khẩu',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12,
                       ),
-                    ]
-                ),),
-                SizedBox(height: 10,),
+                    ),
+                  ]),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 TextFormField(
                   controller: _emailTextController,
-                  validator: (value){
-                    if(value.isEmpty){
+                  validator: (value) {
+                    if (value.isEmpty) {
                       return 'Vui lòng nhâp Email';
                     }
-                    final bool _isValid = EmailValidator.validate(_emailTextController.text);
-                    if(!_isValid){
+                    final bool _isValid =
+                        EmailValidator.validate(_emailTextController.text);
+                    if (!_isValid) {
                       return 'Định dạng email không hợp lệ ';
                     }
                     setState(() {
-                      email=value;
+                      email = value;
                     });
                     return null;
                   },
@@ -77,29 +85,38 @@ class _ResetPasswordState extends State<ResetPassword> {
                     focusColor: Theme.of(context).primaryColor,
                   ),
                 ),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
                 Row(
                   children: [
                     Expanded(
                       child: FlatButton(
-                        onPressed: (){
-                          if(_formKey.currentState.validate()){
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
                             setState(() {
-                              _loading=true;
+                              _loading = true;
                             });
                             _authData.resetPassword(email);
                             ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(
+                              SnackBar(
+                                content: Text(
                                     'Vui lòng kiểm tra Email ${_emailTextController.text}'),
-                                ),
+                              ),
                             );
                           }
-                          Navigator.pushReplacementNamed(context, LoginScreen.id);
+                          Navigator.pushReplacementNamed(
+                              context, LoginScreen.id);
                         },
                         color: Theme.of(context).primaryColor,
                         child: _loading
                             ? LinearProgressIndicator()
-                            : Text('Reset Password',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                            : Text(
+                                'Reset Password',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
                       ),
                     ),
                   ],
