@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:grocery_delivery_app_flutter/providers/auth_provider.dart';
+import 'package:grocery_vendor_app_flutter/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 class ShopPicCard extends StatefulWidget {
@@ -34,11 +34,16 @@ class _ShopPicCardState extends State<ShopPicCard> {
                 borderRadius: BorderRadius.circular(4),
                 child: _image == null ? Center(
                     child: Text(
-                      'Thêm ảnh hồ sơ', //if no image picked
-                      style: TextStyle(color: Colors.grey),
+                      'Thêm ảnh shop',
+                      style: TextStyle(
+                        color: Colors.grey,
+                      ),
                     )
-                ) : Image.file(_image,fit: BoxFit.fill,),
-              )//after pick image
+                ):Image.file(
+                  _image,
+                  fit: BoxFit.fill,
+                ),
+              )
           ),
         ),
       ),

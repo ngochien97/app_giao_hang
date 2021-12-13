@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery_delivery_app_flutter/services/firebase_services.dart';
-import 'package:grocery_delivery_app_flutter/services/order_services.dart';
+import 'package:grocery_vendor_app_flutter/services/firebase_service.dart';
+import 'package:grocery_vendor_app_flutter/services/order_services.dart';
 import 'package:intl/intl.dart';
 
 class OrderSummaryCard extends StatefulWidget {
   final DocumentSnapshot document;
+
   OrderSummaryCard(this.document);
 
   @override
@@ -41,6 +42,7 @@ class _OrderSummaryCardState extends State<OrderSummaryCard> {
       color: Colors.white,
       child: Column(
         children: [
+          //order status
           ListTile(
             horizontalTitleGap: 0,
             leading: CircleAvatar(
@@ -64,25 +66,27 @@ class _OrderSummaryCardState extends State<OrderSummaryCard> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Phương thức thanh toán : ${widget.document['cod'] == true ? 'Thanh toán trực tiếp' : 'Thanh toán trực tuyến'}',
+                  'Phương thức thanh toán : ${widget.document['cod'] == true ? 'Thanh toán trực tuyến' : 'Thanh toán trực tiếp'}',
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Amount : ${widget.document['total'].toStringAsFixed(0)}\đ',
+                  'Tổng : ${widget.document['total'].toStringAsFixed(0)} \đồng',
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
 
-          //need to bring customer details
+          //------------------Customer details--------------------
           _customer != null ? ListTile(
             title: Row(
               children: [
                 Text(
-                  'Khách hàng : ',
+                  'Khách hàng: ',
                   style: TextStyle(
-                      fontSize: 12, fontWeight: FontWeight.bold),
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
                   '${_customer['firstName']} ${_customer['lastName']}',
@@ -97,63 +101,34 @@ class _OrderSummaryCardState extends State<OrderSummaryCard> {
               style: TextStyle(fontSize: 12),
               maxLines: 1,
             ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                InkWell(
-                  onTap: () {
-                    _orderServices.launchMap(
-                        _customer['latitude'],
-                        _customer['longitude'],
-                        _customer['firstName']);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-                      child: Icon(
-                        Icons.map,
-                        color: Colors.white,
-                      ),
-                    ),
+
+            trailing:  InkWell(
+              onTap: () {
+                _orderServices.launchCall('Gọi:${_customer['number']}');
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(4)),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 8, right: 8, top: 2, bottom: 2),
+                  child: Icon(
+                    Icons.phone_in_talk,
+                    color: Colors.white,
                   ),
                 ),
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  onTap: () {
-                    _orderServices
-                        .launchCall('Gọi: ${_customer['number']}');
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-                      child: Icon(
-                        Icons.phone_in_talk,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ) : Container(),
+          //------------------Customer details--------------------
 
+
+          //----------------------Order details----------------------
           ExpansionTile(
             title: Text(
               'Mô tả đơn hàng',
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.black,
-              ),
+              style: TextStyle(fontSize: 10, color: Colors.black),
             ),
             subtitle: Text(
               'Xem mô tả đơn hàng',
@@ -197,11 +172,11 @@ class _OrderSummaryCardState extends State<OrderSummaryCard> {
                       children: [
                         Row(
                           children: [
-                            Text('Người bán: ',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
-                              ),
+                            Text('Người bán : ',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
                             ),
                             Text(
                               widget.document['seller']['shopName'],
@@ -215,18 +190,17 @@ class _OrderSummaryCardState extends State<OrderSummaryCard> {
                         SizedBox(
                           height: 10,
                         ),
-                        if (int.parse(widget.document['discount']) > 0) //Sẽ hiển thị khi sử dụng giảm giá
+                        if (int.parse(widget.document['discount']) > 0) //Sẽ hiển thị khi sử dụng mã giảm giá
                           Container(
                             child: Column(
                               children: [
                                 Row(
                                   children: [
                                     Text(
-                                      'Giảm giá: ',
+                                      'Discount : ',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12),
                                     ),
                                     Text(
                                       '${widget.document['discount']}',
@@ -243,7 +217,7 @@ class _OrderSummaryCardState extends State<OrderSummaryCard> {
                                 Row(
                                   children: [
                                     Text(
-                                      'Mã giảm giá: ',
+                                      'Mã giảm: ',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 12,
@@ -289,6 +263,8 @@ class _OrderSummaryCardState extends State<OrderSummaryCard> {
               )
             ],
           ),
+          //----------------------Order details----------------------
+
           Divider(
             height: 3,
             color: Colors.grey,

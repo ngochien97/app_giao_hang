@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:grocery_delivery_app_flutter/screens/home_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 
@@ -19,32 +19,23 @@ class AuthProvider extends ChangeNotifier {
   String shopAddress;
   String placeName;
   String email;
-  bool loading = false;
 
-  CollectionReference _boys = FirebaseFirestore.instance.collection('boys');
-
-  getEmail(email){
-    this.email = email;
-    notifyListeners();
-  }
-
-  //---------------------Reduce image size---------------------
+  //-----------------------Reduce image size-----------------------------
   Future<File> getImage() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery, imageQuality: 20);
+    final pickedFile =
+        await picker.getImage(source: ImageSource.gallery, imageQuality: 20);
     if (pickedFile != null) {
       this.image = File(pickedFile.path);
       notifyListeners();
     } else {
-      this.pickerError = 'Không có ảnh nào được chọn';
+      this.pickerError = 'Không có ảnh nào được chọn.';
       notifyListeners();
     }
     return this.image;
   }
-  //---------------------Reduce image size---------------------
+  //-----------------------Reduce image size-----------------------------
 
-
-  //---------------------Get Current Address---------------------
   Future getCurrentAddress() async {
     Location location = new Location();
 
@@ -73,34 +64,34 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
 
     final coordinates =
-    new Coordinates(_locationData.latitude, _locationData.longitude);
-    var _addresses = await Geocoder.local.findAddressesFromCoordinates(coordinates);
+        new Coordinates(_locationData.latitude, _locationData.longitude);
+    var _addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var shopAddress = _addresses.first;
     this.shopAddress = shopAddress.addressLine;
     this.placeName = shopAddress.featureName;
     notifyListeners();
     return shopAddress;
   }
-  //---------------------Get Current Address---------------------
 
-
-
-  //------------------Register vendor using email-----------------
-  Future<UserCredential> registerBoys(email, password) async {
+  //----------------register vendor using email----------------
+  Future<UserCredential> registerVendor(email, password) async {
     this.email = email;
     notifyListeners();
     UserCredential userCredential;
     try {
-      userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        this.error = 'Mật khẩu được cung cấp quá yếu.';
+        this.error = 'The password provided is too weak.';
         notifyListeners();
+        print('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        this.error = 'Tài khoản không tồn tại.';
+        this.error = 'The account already exists for that email.';
         notifyListeners();
       }
     } catch (e) {
@@ -110,11 +101,10 @@ class AuthProvider extends ChangeNotifier {
     }
     return userCredential;
   }
-  //------------------Register vendor using email-----------------
+  //----------------register vendor using email----------------
 
-
-  //-----------------------------Login---------------------------
-  Future<UserCredential> loginBoys(email, password) async {
+  //---------------------------Login----------------------------
+  Future<UserCredential> loginVendor(email, password) async {
     this.email = email;
     notifyListeners();
     UserCredential userCredential;
@@ -124,7 +114,7 @@ class AuthProvider extends ChangeNotifier {
         password: password,
       );
     } on FirebaseAuthException catch (e) {
-      this.error=e.code;
+      this.error = e.code;
       notifyListeners();
     } catch (e) {
       this.error = e.code;
@@ -133,20 +123,17 @@ class AuthProvider extends ChangeNotifier {
     }
     return userCredential;
   }
-  //-----------------------------Login---------------------------
+  //---------------------------Login----------------------------
 
-
-  //-------------------------Reset password-----------------------
+  //----------------------Reset password------------------------
   Future<void> resetPassword(email) async {
     this.email = email;
     notifyListeners();
     UserCredential userCredential;
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email).whenComplete((){
-
-      });
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      this.error=e.code;
+      this.error = e.code;
       notifyListeners();
     } catch (e) {
       this.error = e.code;
@@ -155,26 +142,42 @@ class AuthProvider extends ChangeNotifier {
     }
     return userCredential;
   }
-  //-------------------------Reset password-----------------------
+  //----------------------Reset password------------------------
 
-
-  //-------------------Save vendor data to Firestore-----------------
-  Future<void> saveBoysDataToDb({String url, String name, String mobile, String password, context}) {
+  //--------------------Save vendor data to Firestore-------------------
+  Future<void> saveVendorDataToDb(
+      {String url, String shopName, String mobile, String dialog}) {
     User user = FirebaseAuth.instance.currentUser;
-    _boys.doc(this.email).update({
-      'uid':user.uid,
-      'name':name,
-      'password' : password,
-      'mobile':mobile,
-      'address' : '${this.placeName}: ${this.shopAddress}',
+    DocumentReference _vendors =
+        FirebaseFirestore.instance.collection('vendors').doc(user.uid);
+    _vendors.set({
+      'uid': user.uid,
+      'shopName': shopName,
+      'mobile': mobile,
+      'email': this.email,
+      'dialog': dialog,
+      'address': '${this.placeName}: ${this.shopAddress}',
       'location': GeoPoint(this.shopLatitude, this.shopLongitude),
-      'imageUrl':url,
-      'accVerified':false
-    }).whenComplete(() {
-      Navigator.pushReplacementNamed(context, HomeScreen.id);
+      'shopOpen': true,
+      'rating': 0.00,
+      'totalRating': 0,
+      'isTopPicked': false,
+      'imageUrl': url,
+      'accVerified': false,
+    }).whenComplete(() async {
+      //Gửi mail đến cho admin
+      // await FlutterEmailSender.send(mail);
     });
     return null;
   }
-//-------------------Save vendor data to Firestore-----------------
+//--------------------Save vendor data to Firestore-------------------
 }
 
+final Email mail = Email(
+  body: 'Nội dung email',
+  subject: 'Chủ đề',
+  recipients: ['chanh12012001@gmail.com'],
+  cc: ['cc@example.com'],
+  bcc: ['bcc@example.com'],
+  isHTML: false,
+);

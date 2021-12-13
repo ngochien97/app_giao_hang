@@ -44,35 +44,6 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:884458762762:android:17a6536977d60e98d5a5f3",
-        "android_client_info": {
-          "package_name": "com.grocery_delivery_app_flutter"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "884458762762-aq43utqj8q0r61hfsgo14qvpt2r9hnst.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDlupwxTzQl9TW1SvlxiFAgVjjqwUrwYeY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "884458762762-aq43utqj8q0r61hfsgo14qvpt2r9hnst.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:884458762762:android:7cb88cb625c379f5d5a5f3",
         "android_client_info": {
           "package_name": "com.grocery_vendor_app_flutter"

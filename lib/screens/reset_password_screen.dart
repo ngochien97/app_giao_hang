@@ -1,7 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery_delivery_app_flutter/providers/auth_provider.dart';
-import 'package:grocery_delivery_app_flutter/screens/login_screen.dart';
+import 'package:grocery_vendor_app_flutter/providers/auth_provider.dart';
+import 'package:grocery_vendor_app_flutter/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -14,7 +14,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   final _formKey = GlobalKey<FormState>();
   var _emailTextController = TextEditingController();
   String email;
-  bool _loading=false;
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,34 +30,35 @@ class _ResetPasswordState extends State<ResetPassword> {
               children: [
                 Image.asset('images/forgot.png',height: 250,),
                 SizedBox(height: 20,),
-                RichText(
-                  text: TextSpan(
-                      text: '',
-                      children: [
-                        TextSpan(
-                          text: 'Quên mật khẩu' ,
-                          style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),
-                        ),
-                        TextSpan(
-                          text : 'Đừng lo lắng, hãy cung cấp cho chúng tôi Email đã đăng ký của bạn, chúng tôi sẽ gửi cho bạn một email để đặt lại mật khẩu',
-                          style : TextStyle(
+                RichText(text: TextSpan(
+                    text: '',
+                    children: [
+                      TextSpan(
+                          text: 'Quên mât khẩu ' ,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                      ),
+                      TextSpan(
+                          text : 'Đừng lo lắng! Nhập lại email đăng kí. Chúng tôi sẽ gửi bạn 1 email để lấy lại mật khẩu',
+                          style :TextStyle(
                             color: Colors.red,
                             fontSize: 12,
                           ),
-                        ),
-                      ]
-                  ),
-                ),
+                      ),
+                    ]
+                ),),
                 SizedBox(height: 10,),
                 TextFormField(
                   controller: _emailTextController,
                   validator: (value){
                     if(value.isEmpty){
-                      return 'Vui lòng nhập Email';
+                      return 'Vui lòng nhâp Email';
                     }
                     final bool _isValid = EmailValidator.validate(_emailTextController.text);
                     if(!_isValid){
-                      return 'Email không đúng định dạng';
+                      return 'Định dạng email không hợp lệ ';
                     }
                     setState(() {
                       email=value;
@@ -71,9 +72,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     prefixIcon: Icon(Icons.email_outlined),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: Theme.of(context).primaryColor,
-                        width: 2,
-                      ),
+                          color: Theme.of(context).primaryColor, width: 2),
                     ),
                     focusColor: Theme.of(context).primaryColor,
                   ),
@@ -90,14 +89,17 @@ class _ResetPasswordState extends State<ResetPassword> {
                             });
                             _authData.resetPassword(email);
                             ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Vui lòng kiểm tra Email ${_emailTextController.text}')));
+                                SnackBar(content: Text(
+                                    'Vui lòng kiểm tra Email ${_emailTextController.text}'),
+                                ),
+                            );
                           }
                           Navigator.pushReplacementNamed(context, LoginScreen.id);
                         },
                         color: Theme.of(context).primaryColor,
                         child: _loading
                             ? LinearProgressIndicator()
-                            : Text('Đặt lại mật khẩu',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                            : Text('Reset Password',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                       ),
                     ),
                   ],

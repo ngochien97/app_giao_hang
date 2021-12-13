@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.grocery_delivery_app_flutter">
+    package="com.grocery_vendor_app_flutter">
    <application
-        android:label="grocery_delivery_app_flutter"
+        android:label="grocery_vendor_app_flutter"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

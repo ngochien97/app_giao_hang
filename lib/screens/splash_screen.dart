@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:grocery_delivery_app_flutter/screens/home_screen.dart';
-import 'package:grocery_delivery_app_flutter/screens/login_screen.dart';
+import 'package:grocery_vendor_app_flutter/screens/home_screen.dart';
+import 'package:grocery_vendor_app_flutter/screens/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String id = 'splash-screen';
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -38,8 +39,8 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Image.asset('images/logo.png'),
             Text(
-              'Grocery Store - Delivery App',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+              'Grocery Store - Vendor App',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
           ],
         ),
@@ -47,3 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
+
+
+
+
