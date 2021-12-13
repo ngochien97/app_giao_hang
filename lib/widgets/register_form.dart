@@ -6,7 +6,6 @@ import 'package:grocery_delivery_app_flutter/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
 class RegisterForm extends StatefulWidget {
-  static const String id = 'register-form';
   @override
   _RegisterFormState createState() => _RegisterFormState();
 }
@@ -304,7 +303,7 @@ class _RegisterFormState extends State<RegisterForm> {
                                   });
                                 }
                               } else {
-                                scaffoldMessage('Ảnh hồ sơ đã được thêm');
+                                scaffoldMessage('Ảnh hồ sơ chưa được thêm');
                               }
                             },
                             child: Text(
