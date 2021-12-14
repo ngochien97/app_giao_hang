@@ -90,7 +90,7 @@ class _MenuWidgetState extends State<MenuWidget> {
           sliderItem('Sản phẩm', Icons.shopping_bag_outlined),
           sliderItem('Quảng cáo', CupertinoIcons.photo),
           sliderItem('Mã giảm giá', CupertinoIcons.gift),
-          sliderItem('Đơn đặt hàng', Icons.list_alt_outlined),
+          sliderItem('Trạng thái đơn hàng', Icons.list_alt_outlined),
           sliderItem('Đăng xuất', Icons.arrow_back_ios)
         ],
       ),
