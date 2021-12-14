@@ -78,7 +78,7 @@ class _OrderScreenState extends State<OrderScreen> {
               stream: _orderServices.orders
                   .where('seller.sellerId', isEqualTo: user.uid)
                   .where('orderStatus',
-                  isEqualTo: tag > 0 ? _orderProvider.status : null)
+                      isEqualTo: tag > 0 ? _orderProvider.status : null)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -91,10 +91,18 @@ class _OrderScreenState extends State<OrderScreen> {
                 }
                 if (snapshot.data.size == 0) {
                   //TODO: No orders screen
-                  return Center(
-                    child: Text(tag > 0
-                        ? 'Không có đơn hàng ${options[tag]}'
-                        : 'Không có đơn hàng. Tiếp tục mua sắm'),
+                  // return Center(
+                  //   child: Text(tag > 0
+                  //       ? 'Không có đơn hàng ${options[tag]}'
+                  //       : 'Không có đơn hàng. Tiếp tục mua sắm'),
+                  // );
+                  return Container(
+                    height: 300,
+                    width:380,
+                    child: Image.asset(
+                      'images/donhang.png',
+                      fit: BoxFit.fitWidth,
+                    ),
                   );
                 }
 
@@ -102,7 +110,7 @@ class _OrderScreenState extends State<OrderScreen> {
                   child: new ListView(
                     padding: EdgeInsets.zero,
                     children:
-                    snapshot.data.docs.map((DocumentSnapshot document) {
+                        snapshot.data.docs.map((DocumentSnapshot document) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 4),
                         child: new OrderSummaryCard(document),
@@ -118,4 +126,3 @@ class _OrderScreenState extends State<OrderScreen> {
     );
   }
 }
-

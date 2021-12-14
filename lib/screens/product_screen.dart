@@ -75,29 +75,8 @@ class ProductScreen extends StatelessWidget {
                 ),
               ),
             ),
-            TabBar(
-              indicatorColor: Theme.of(context).primaryColor,
-              labelColor: Theme.of(context).primaryColor,
-              unselectedLabelColor: Colors.black54,
-              tabs: [
-                Tab(
-                  text: 'ĐÃ PHÁT HÀNH',
-                ),
-                Tab(
-                  text: 'CHƯA PHÁT HÀNH',
-                ),
-              ],
-            ),
-            Expanded(
-              child: Container(
-                child: TabBarView(
-                  children: [
-                    PublishedProducts(),
-                    UnPublishedProducts(),
-                  ],
-                ),
-              ),
-            )
+            PublishedProducts(),
+            
           ],
         ),
       ),

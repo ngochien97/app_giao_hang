@@ -20,33 +20,36 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SliderMenuContainer(
-          appBarColor: Colors.white,
-          appBarHeight: 80,
-          key: _key,
-          sliderMenuOpenSize: 250,
-          title: Text('',),
-          trailing: Row(
-            children: [
-              IconButton(
-                onPressed: (){},
-                icon: Icon(CupertinoIcons.search),
-              ),
-              IconButton(
-                onPressed: (){},
-                icon: Icon(CupertinoIcons.bell),
-              )
-            ],
-          ),
-          sliderMenu: MenuWidget(
-            onItemClick: (title) {
-              _key.currentState.closeDrawer();
-              setState(() {
-                this.title = title;
-              });
-            },
-          ),
-          sliderMain: _services.drawerScreen(title, context)),
+      body: Container(
+        margin: EdgeInsets.only(top: 20),
+        child: SliderMenuContainer(
+            appBarColor: Colors.white,
+            appBarHeight: 80,
+            key: _key,
+            sliderMenuOpenSize: 250,
+            title: Text('',),
+            trailing: Row(
+              children: [
+                IconButton(
+                  onPressed: (){},
+                  icon: Icon(CupertinoIcons.search),
+                ),
+                IconButton(
+                  onPressed: (){},
+                  icon: Icon(CupertinoIcons.bell),
+                )
+              ],
+            ),
+            sliderMenu: MenuWidget(
+              onItemClick: (title) {
+                _key.currentState.closeDrawer();
+                setState(() {
+                  this.title = title;
+                });
+              },
+            ),
+            sliderMain: _services.drawerScreen(title, context)),
+      ),
     );
   }
 }
